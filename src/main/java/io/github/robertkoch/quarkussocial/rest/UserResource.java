@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import io.github.robertkoch.quarkussocial.domain.model.User;
 import io.github.robertkoch.quarkussocial.rest.domain.repository.UserRepository;
 import io.github.robertkoch.quarkussocial.rest.dto.CreateUserRequest;
+import io.github.robertkoch.quarkussocial.rest.dto.exception.ResponseError;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 @Path("/users")
@@ -41,10 +42,10 @@ public class UserResource {
 	public Response createUser(CreateUserRequest userRequest) {
 		
 		Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(userRequest);
+		
 		if(!violations.isEmpty()) {
-			ConstraintViolation<CreateUserRequest> erro = violations.stream().findAny().get();
-			String errorMessage = erro.getMessage();
-			return Response.status(400).entity(errorMessage).build();
+			ResponseError responseError = ResponseError.createFromValidation(violations);
+			return Response.status(400).entity(responseError).build();
 		}
 		
 		User user = new User();
