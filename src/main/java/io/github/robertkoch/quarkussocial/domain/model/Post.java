@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
@@ -23,7 +24,7 @@ public class Post {
 	private String text;
 	
 	@Column(name="dateTime")
-	private LocalDateTime dataTime;
+	private LocalDateTime dateTime;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -33,11 +34,11 @@ public class Post {
 		super();
 	}
 
-	public Post(Long id, String text, LocalDateTime dataTime, User user) {
+	public Post(Long id, String text, LocalDateTime dateTime, User user) {
 		super();
 		this.id = id;
 		this.text = text;
-		this.dataTime = dataTime;
+		this.dateTime = dateTime;
 		this.user = user;
 	}
 
@@ -57,12 +58,12 @@ public class Post {
 		this.text = text;
 	}
 
-	public LocalDateTime getDataTime() {
-		return dataTime;
+	public LocalDateTime getDateTime() {
+		return dateTime;
 	}
 
-	public void setDataTime(LocalDateTime dataTime) {
-		this.dataTime = dataTime;
+	public void setDateTime(LocalDateTime dateTime) {
+		this.dateTime = dateTime;
 	}
 
 	public User getUser() {
@@ -71,6 +72,11 @@ public class Post {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@PrePersist
+	public void prePersist() {
+		setDateTime(LocalDateTime.now());
 	}
 	
 }

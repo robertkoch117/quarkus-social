@@ -1,5 +1,8 @@
 package io.github.robertkoch.quarkussocial.rest.resource;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -16,6 +19,10 @@ import io.github.robertkoch.quarkussocial.domain.model.User;
 import io.github.robertkoch.quarkussocial.rest.domain.repository.PostRepository;
 import io.github.robertkoch.quarkussocial.rest.domain.repository.UserRepository;
 import io.github.robertkoch.quarkussocial.rest.dto.CreatePostRequest;
+import io.github.robertkoch.quarkussocial.rest.dto.PostResponse;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.panache.common.Sort;
+import io.quarkus.panache.common.Sort.Direction;
 
 @Path("/users/{userId}/posts")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -56,6 +63,12 @@ public class PostResource {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 		
-		return Response.ok().build();
+		PanacheQuery<Post> query = postRepository.find("user", Sort.by("dateTime",Sort.Direction.Descending), user);
+		
+		List<Post> list = query.list();
+		
+		List<PostResponse> postResponseList = list.stream().map(post -> PostResponse.fromEntity(post)).collect(Collectors.toList());
+		
+		return Response.ok(postResponseList).build();
 	}
 }
