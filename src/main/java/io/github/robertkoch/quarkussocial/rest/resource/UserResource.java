@@ -1,4 +1,4 @@
-package io.github.robertkoch.quarkussocial.rest;
+package io.github.robertkoch.quarkussocial.rest.resource;
 
 import java.util.Set;
 
@@ -59,6 +59,7 @@ public class UserResource {
 	@GET
 	public Response listAllUsers() {
 		PanacheQuery<User> query = repository.findAll();
+		repository.listAll();
 		return Response.ok(query.list()).build();
 	}
 	
