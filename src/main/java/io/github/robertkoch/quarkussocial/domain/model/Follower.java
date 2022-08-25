@@ -21,7 +21,7 @@ public class Follower {
 	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name="user_id")
+	@JoinColumn(name="follower_id")
 	private User follower;
 
 	public Follower() {
@@ -34,7 +34,6 @@ public class Follower {
 		this.user = user;
 		this.follower = follower;
 	}
-	
 
 	public Long getId() {
 		return id;
