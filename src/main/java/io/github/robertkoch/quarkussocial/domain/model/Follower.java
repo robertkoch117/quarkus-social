@@ -24,12 +24,17 @@ public class Follower {
 	@JoinColumn(name="user_id")
 	private User follower;
 
+	public Follower() {
+		
+	}
+
 	public Follower(Long id, User user, User follower) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.follower = follower;
 	}
+	
 
 	public Long getId() {
 		return id;
